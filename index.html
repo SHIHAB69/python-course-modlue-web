@@ -233,6 +233,83 @@
       backdrop-filter: blur(18px);
     }
 
+    .terminal-window {
+      background: rgba(4, 8, 18, 0.92);
+      border-radius: calc(var(--radius-lg) - 6px);
+      border: 1px solid rgba(119, 170, 255, 0.16);
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+      font-family: 'Fira Code', 'Source Code Pro', Consolas, monospace;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      background: linear-gradient(135deg, rgba(0, 255, 191, 0.2), rgba(119, 170, 255, 0.12));
+      border-bottom: 1px solid rgba(119, 170, 255, 0.18);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+    }
+
+    .terminal-dot {
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 999px;
+      background: rgba(0, 255, 191, 0.85);
+      box-shadow: 0 0 12px rgba(0, 255, 191, 0.65);
+    }
+
+    .terminal-body {
+      padding: 1.6rem 1.4rem 1.4rem;
+      background: radial-gradient(circle at top left, rgba(0, 255, 191, 0.12), transparent 55%),
+        rgba(4, 8, 18, 0.92);
+      color: #e5f2ff;
+      min-height: clamp(220px, 32vh, 260px);
+      position: relative;
+    }
+
+    .terminal-line {
+      display: block;
+      margin-bottom: 0.5rem;
+      white-space: pre-wrap;
+      line-height: 1.4;
+    }
+
+    .terminal-line.command {
+      color: var(--accent);
+    }
+
+    .terminal-line.output {
+      color: var(--text-secondary);
+    }
+
+    .terminal-line.highlight {
+      color: var(--accent-secondary);
+    }
+
+    .terminal-cursor {
+      display: inline-block;
+      width: 0.55rem;
+      height: 1.1rem;
+      margin-left: 0.2rem;
+      background: var(--accent);
+      opacity: 0;
+      animation: blink 1s steps(2, start) infinite;
+    }
+
+    @keyframes blink {
+      to {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
     .hero-panel h3 {
       margin-top: 0;
       margin-bottom: 1rem;
@@ -714,14 +791,15 @@
         </div>
       </div>
       <div class="hero-panel">
-        <h3>Quick Glimpse</h3>
-        <ul>
-          <li><strong>Module 1:</strong> Python basics to functional thinking</li>
-          <li><strong>Module 2:</strong> Data structures & file workflows</li>
-          <li><strong>Module 3:</strong> Object-oriented design patterns</li>
-          <li><strong>Module 4:</strong> Libraries, APIs, backend, AI</li>
-          <li><strong>Module 5:</strong> Capstone build + presentations</li>
-        </ul>
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <span class="terminal-dot"></span>
+            <span class="terminal-dot" style="background: rgba(119, 170, 255, 0.85);"></span>
+            <span class="terminal-dot" style="background: rgba(255, 255, 255, 0.45);"></span>
+            <span style="margin-left: 0.8rem;">python demo feed</span>
+          </div>
+          <div class="terminal-body" id="terminalBody"></div>
+        </div>
       </div>
     </div>
   </header>
@@ -1071,6 +1149,77 @@
   </script>
 
   <script>
+    const terminalBody = document.getElementById('terminalBody');
+    const terminalSequence = [
+      { text: '$ python module_feed.py', className: 'command', pause: 900 },
+      { text: ':: loading modules (1/5) — Python Foundations', className: 'output', pause: 650 },
+      { text: '   ▶ focus: hello world · data types · control flow', className: 'highlight', pause: 720 },
+      { text: ':: loading modules (2/5) — Data Structures & Files', className: 'output', pause: 620 },
+      { text: '   ▶ focus: lists/dicts · csv/json · error handling', className: 'highlight', pause: 700 },
+      { text: ':: loading modules (3/5) — Object-Oriented Programming', className: 'output', pause: 600 },
+      { text: '   ▶ focus: classes · inheritance · banking mini-project', className: 'highlight', pause: 720 },
+      { text: ':: loading modules (4/5) — Libraries · Backend · AI', className: 'output', pause: 600 },
+      { text: '   ▶ focus: requests · Django intro · LLM playground', className: 'highlight', pause: 780 },
+      { text: ':: loading modules (5/5) — Capstone & Showcase', className: 'output', pause: 650 },
+      { text: '   ▶ focus: final build · presentation · career playbook', className: 'highlight', pause: 900 },
+      { text: ':: sync complete — ready for demo class (Room 601)', className: 'output', pause: 1600 }
+    ];
+
+    function typeLine(line, onComplete) {
+      if (!terminalBody) {
+        onComplete?.();
+        return;
+      }
+
+      const span = document.createElement('span');
+      span.classList.add('terminal-line');
+      span.classList.add(line.className || 'output');
+      const textNode = document.createTextNode('');
+      span.appendChild(textNode);
+      const cursor = document.createElement('span');
+      cursor.className = 'terminal-cursor';
+      span.appendChild(cursor);
+      terminalBody.appendChild(span);
+
+      let index = 0;
+      const tick = () => {
+        if (index < line.text.length) {
+          textNode.textContent += line.text.charAt(index);
+          index += 1;
+          const delay = 24 + Math.random() * 32;
+          setTimeout(tick, delay);
+        } else {
+          cursor.remove();
+          setTimeout(() => onComplete?.(), line.pause ?? 600);
+        }
+      };
+
+      tick();
+    }
+
+    function runTerminalAnimation() {
+      if (!terminalBody) {
+        return;
+      }
+
+      terminalBody.innerHTML = '';
+      let lineIndex = 0;
+
+      const next = () => {
+        if (lineIndex >= terminalSequence.length) {
+          setTimeout(runTerminalAnimation, 2600);
+          return;
+        }
+        const line = terminalSequence[lineIndex];
+        lineIndex += 1;
+        typeLine(line, next);
+      };
+
+      next();
+    }
+
+    runTerminalAnimation();
+
     const authStatus = document.getElementById('authStatus');
     const signOutButton = document.getElementById('signOut');
     const trackerPanel = document.getElementById('trackerPanel');
