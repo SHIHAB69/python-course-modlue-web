@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Python Foundations — One Shot Overview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-main: #090c16;
+      --bg-card: #0f1524;
+      --bg-alt: #10182c;
+      --accent: #00ffbf;
+      --accent-soft: #76ffe0;
+      --accent-secondary: #77aaff;
+      --text-primary: #f8f9ff;
+      --text-secondary: #bac0d6;
+      --shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+      --radius-lg: 24px;
+      --radius-sm: 12px;
+      --transition: all 220ms ease;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top left, rgba(0, 255, 191, 0.08), transparent 45%),
+        radial-gradient(circle at bottom right, rgba(119, 170, 255, 0.08), transparent 55%),
+        var(--bg-main);
+      color: var(--text-primary);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 4rem clamp(1rem, 5vw, 6rem) 6rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(140deg, rgba(0, 255, 191, 0.12), rgba(9, 12, 22, 0.8));
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 4rem;
+    }
+
+    .logo {
+      font-weight: 600;
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(1rem, 2vw, 1.8rem);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: clamp(2rem, 3vw, 3.5rem);
+      position: relative;
+      z-index: 1;
+    }
+
+    .countdown-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 0.9rem 1.4rem;
+      margin-bottom: 2.4rem;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(115deg, rgba(0, 255, 191, 0.18), rgba(119, 170, 255, 0.12));
+      border: 1px solid rgba(0, 255, 191, 0.28);
+      color: var(--text-primary);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .countdown-banner span {
+      color: inherit;
+    }
+
+    .countdown-deadline {
+      font-size: clamp(0.85rem, 1.4vw, 0.95rem);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .countdown-timer {
+      display: flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      font-size: clamp(1rem, 1.8vw, 1.2rem);
+    }
+
+    .countdown-hours {
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .countdown-minutes {
+      font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+      font-weight: 600;
+      color: var(--accent-secondary);
+    }
+
+    .countdown-seconds {
+      font-size: clamp(1rem, 2.2vw, 1.4rem);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .hero-details {
+      margin-top: 1.8rem;
+      padding: 1rem 1.4rem;
+      border-radius: var(--radius-lg);
+      background: rgba(8, 12, 24, 0.6);
+      border: 1px solid rgba(119, 170, 255, 0.18);
+      display: grid;
+      gap: 0.35rem;
+      width: fit-content;
+      box-shadow: 0 20px 32px rgba(0, 0, 0, 0.28);
+    }
+
+    .hero-details span {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-details strong {
+      font-size: 1.1rem;
+      color: var(--accent);
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
+      margin-bottom: 1rem;
+      line-height: 1.05;
+    }
+
+    .hero-copy p {
+      color: var(--text-secondary);
+      font-size: clamp(1rem, 1.2vw, 1.1rem);
+      margin-bottom: 2rem;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 0.9rem 1.8rem;
+      border-radius: 999px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-secondary));
+      color: #02060f;
+      box-shadow: 0 18px 30px rgba(0, 255, 191, 0.22);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(0, 255, 191, 0.3);
+    }
+
+    .btn-outline {
+      border: 1px solid rgba(119, 170, 255, 0.4);
+      color: var(--text-primary);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent-secondary);
+      color: var(--accent-secondary);
+    }
+
+    .hero-panel {
+      padding: clamp(1.5rem, 2vw, 2.5rem);
+      background: rgba(15, 21, 36, 0.65);
+      border: 1px solid rgba(0, 255, 191, 0.12);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-panel h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+
+    .hero-panel ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      color: var(--text-secondary);
+    }
+
+    main {
+      padding: 0 clamp(1rem, 5vw, 6rem) 6rem;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-title span {
+      padding: 0.3rem 1rem;
+      border-radius: 999px;
+      background: rgba(0, 255, 191, 0.08);
+      color: var(--accent);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: clamp(1.5rem, 2vw, 2.5rem);
+    }
+
+    .module-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.6rem, 2vw, 2.2rem);
+      border: 1px solid rgba(0, 255, 191, 0.1);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+      isolation: isolate;
+    }
+
+    .module-card::before {
+      content: '';
+      position: absolute;
+      inset: -40% 55% 40% -10%;
+      background: linear-gradient(120deg, rgba(0, 255, 191, 0.08), transparent 60%);
+      transform: rotate(8deg);
+      pointer-events: none;
+      transition: opacity 240ms ease;
+    }
+
+    .module-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(150deg, rgba(119, 170, 255, 0.14), rgba(0, 255, 191, 0.04));
+      mix-blend-mode: lighten;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 260ms ease;
+    }
+
+    .module-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(0, 255, 191, 0.26);
+      box-shadow: 0 26px 48px rgba(0, 0, 0, 0.55);
+    }
+
+    .module-card.card-open {
+      border-color: rgba(0, 255, 191, 0.38);
+      box-shadow: 0 32px 58px rgba(0, 255, 191, 0.16);
+    }
+
+    .module-card.card-open::after {
+      opacity: 0.28;
+    }
+
+    .module-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .module-header h3 {
+      margin: 0;
+      font-size: 1.3rem;
+    }
+
+    .module-duration {
+      font-size: 0.85rem;
+      color: var(--accent-secondary);
+      padding: 0.2rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(119, 170, 255, 0.12);
+    }
+
+    .module-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.2rem;
+    }
+
+    .module-tagline {
+      margin: 0;
+      color: var(--text-secondary);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .module-toggle {
+      padding: 0.55rem 1.2rem;
+      border-radius: 999px;
+      border: 1px solid rgba(119, 170, 255, 0.35);
+      background: rgba(16, 24, 44, 0.55);
+      color: var(--accent-secondary);
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .module-toggle:hover,
+    .module-toggle:focus-visible {
+      border-color: var(--accent);
+      color: var(--accent);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .class-list {
+      margin-top: 1.2rem;
+      border-top: 1px solid rgba(119, 170, 255, 0.12);
+      padding-top: 1.2rem;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 340ms ease, opacity 240ms ease;
+    }
+
+    .module-card.card-open .class-list {
+      max-height: 1200px;
+      opacity: 1;
+    }
+
+    .class-item {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px dashed rgba(119, 170, 255, 0.12);
+    }
+
+    .class-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .class-item strong {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--text-primary);
+    }
+
+    .class-item .tagline {
+      color: var(--accent);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .class-item p {
+      margin: 0.4rem 0 0;
+    }
+
+    .progress-section {
+      margin-top: 5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .progress-card {
+      background: var(--bg-alt);
+      border-radius: var(--radius-lg);
+      padding: clamp(1.8rem, 2.2vw, 2.5rem);
+      border: 1px solid rgba(119, 170, 255, 0.14);
+      box-shadow: var(--shadow);
+    }
+
+    .progress-card h3 {
+      margin-top: 0;
+    }
+
+    .progress-card p {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+
+    .tracker-panel {
+      background: rgba(16, 24, 44, 0.75);
+      border-radius: var(--radius-lg);
+      padding: 1.6rem;
+      border: 1px solid rgba(0, 255, 191, 0.14);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tracker-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top center, rgba(0, 255, 191, 0.08), transparent 60%);
+      pointer-events: none;
+    }
+
+    .tracker-panel h4 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
+
+    .tracker-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.9rem;
+    }
+
+    .tracker-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(9, 12, 22, 0.6);
+      border-radius: var(--radius-sm);
+      padding: 0.8rem 1rem;
+      border: 1px solid rgba(119, 170, 255, 0.12);
+    }
+
+    .tracker-item label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      width: 100%;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+
+    .tracker-item label span {
+      flex: 1;
+    }
+
+    input[type='checkbox'] {
+      accent-color: var(--accent);
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    input[type='checkbox']:disabled {
+      cursor: not-allowed;
+    }
+
+    .auth-status {
+      margin-top: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--accent-secondary);
+    }
+
+    .timeline {
+      margin-top: 5rem;
+      padding: 2.5rem;
+      background: rgba(9, 15, 33, 0.85);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(119, 170, 255, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(119, 170, 255, 0.08), transparent 50%);
+      pointer-events: none;
+    }
+
+    .timeline-grid {
+      display: grid;
+      gap: 1.6rem;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 1.6rem;
+      align-items: start;
+      position: relative;
+      padding-left: 1.6rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.3rem;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(0, 255, 191, 0.2), rgba(119, 170, 255, 0.4));
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -0.46rem;
+      top: 0.2rem;
+      width: 0.9rem;
+      height: 0.9rem;
+      border-radius: 50%;
+      background: var(--accent-secondary);
+      box-shadow: 0 0 18px rgba(119, 170, 255, 0.8);
+    }
+
+    .timeline-week {
+      font-weight: 600;
+      color: var(--accent-secondary);
+    }
+
+    .timeline-content {
+      color: var(--text-secondary);
+    }
+
+    .faq-section {
+      margin-top: 5rem;
+      display: grid;
+      gap: 1.2rem;
+    }
+
+    .faq-card {
+      background: rgba(9, 12, 22, 0.76);
+      border: 1px solid rgba(119, 170, 255, 0.14);
+      border-radius: var(--radius-lg);
+      padding: 1.6rem;
+      box-shadow: var(--shadow);
+    }
+
+    .faq-card h4 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: 5rem;
+      padding: 3rem clamp(1rem, 5vw, 6rem);
+      border-top: 1px solid rgba(119, 170, 255, 0.12);
+      background: rgba(6, 8, 16, 0.95);
+      color: var(--text-secondary);
+    }
+
+    .footer-grid {
+      display: grid;
+      gap: 1.6rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .footer-grid h4 {
+      margin: 0 0 0.6rem;
+      color: var(--text-primary);
+    }
+
+    .footer-bottom {
+      margin-top: 2rem;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 700px) {
+      .nav-links {
+        display: none;
+      }
+
+      header {
+        padding-top: 3rem;
+      }
+
+      .countdown-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+        text-align: left;
+      }
+
+      .countdown-deadline {
+        white-space: normal;
+      }
+
+      .hero-details {
+        width: 100%;
+      }
+
+      .module-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+      }
+
+      .module-toggle {
+        width: 100%;
+        text-align: center;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        padding-left: 1.4rem;
+      }
+
+      .timeline-dot {
+        left: -0.55rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="countdown-banner">
+      <span>Registration closes in</span>
+      <span class="countdown-deadline" id="countdownDeadline">Ends —</span>
+      <div class="countdown-timer" id="countdown">
+        <span class="countdown-hours" id="countdownHours">--</span>
+        <span>hours</span>
+        <span class="countdown-minutes" id="countdownMinutes">--</span>
+        <span>min</span>
+        <span class="countdown-seconds" id="countdownSeconds">--</span>
+        <span>sec</span>
+        <span>|</span>
+        <span id="countdownTimestamp">--</span>
+      </div>
+    </div>
+    <nav>
+      <a href="#" class="logo">Module One Shot</a>
+      <ul class="nav-links">
+        <li><a href="#modules">Modules</a></li>
+        <li><a href="#progress">Tracking</a></li>
+        <li><a href="#timeline">Schedule</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+    </nav>
+
+    <div class="hero">
+      <div class="hero-copy">
+        <h1>Python Course Roadmap<br />Designed for Rapid Mastery</h1>
+        <p>
+          Explore every class in the 15-session journey. Skim modules, plan your practice, and capture progress after you register with your DIU email. No fluff—just the essentials you need to build confidence in Python, backend, and AI foundations.
+        </p>
+        <div class="cta-group">
+          <a class="btn btn-primary" id="registerBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSflKYhHRHBtw6n1DmtyFTmA-2raQGwY8NtALRFdxMZY4ScHBg/viewform" target="_blank" rel="noopener">Register now</a>
+          <a class="btn btn-outline" href="#modules">Browse curriculum</a>
+        </div>
+        <div class="hero-details">
+          <span>Demo class</span>
+          <strong>Wednesday · 12 · Room 601</strong>
+          <span>Time · 1:00 – 2:30 PM</span>
+        </div>
+      </div>
+      <div class="hero-panel">
+        <h3>Quick Glimpse</h3>
+        <ul>
+          <li><strong>Module 1:</strong> Python basics to functional thinking</li>
+          <li><strong>Module 2:</strong> Data structures & file workflows</li>
+          <li><strong>Module 3:</strong> Object-oriented design patterns</li>
+          <li><strong>Module 4:</strong> Libraries, APIs, backend, AI</li>
+          <li><strong>Module 5:</strong> Capstone build + presentations</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="modules">
+      <div class="section-title">
+        <span>Course Blueprint</span>
+        <h2>All Modules At a Glance</h2>
+      </div>
+
+      <div class="module-grid">
+        <article class="module-card card-open" data-module="Module 1 — Python Foundations">
+          <div class="module-header">
+            <h3>Module 1 · Python Foundations</h3>
+            <span class="module-duration">Classes 1-4</span>
+          </div>
+          <div class="module-meta">
+            <p class="module-tagline">Build your core syntax and logic skills</p>
+            <button class="module-toggle" type="button" aria-expanded="true">Hide details</button>
+          </div>
+          <div class="class-list">
+            <div class="class-item">
+              <strong>Class 1: Introduction to Python & Setup</strong>
+              <p>Python history, the ecosystem, installing runtimes & editors, and your first <code>print("Hello, World!")</code>.</p>
+              <p class="tagline">Activity · Intro script · Homework · Arithmetic practice</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 2: Data Types & Operators</strong>
+              <p>Numbers, strings, collections, casting, and the operator family (arithmetic to logical) with formatting tricks.</p>
+              <p class="tagline">Activity · Calculator build · Homework · Conversion drills</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 3: Control Flow & Iteration</strong>
+              <p>Decision paths with <code>if/elif/else</code>, loops, <code>range()</code>, and pattern printing.</p>
+              <p class="tagline">Mini Project · Multiplication table & patterns · Homework · Number guessing game</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 4: Functions & Modular Thinking</strong>
+              <p>Creating reusable functions, parameter management, scope, lambdas, and recursion fundamentals.</p>
+              <p class="tagline">Activity · Factorial & Fibonacci · Homework · Function challenges</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="module-card" data-module="Module 2 — Data Structures & File Handling">
+          <div class="module-header">
+            <h3>Module 2 · Data Structures & File Handling</h3>
+            <span class="module-duration">Classes 5-7</span>
+          </div>
+          <div class="module-meta">
+            <p class="module-tagline">Manage, persist, and structure data like a pro</p>
+            <button class="module-toggle" type="button" aria-expanded="false">View classes</button>
+          </div>
+          <div class="class-list">
+            <div class="class-item">
+              <strong>Class 5: Lists to Dictionaries (Deep Dive)</strong>
+              <p>CRUD operations, slicing, comprehension, nesting, and go-to methods for real data wrangling.</p>
+              <p class="tagline">Activity · Student records · Homework · Phonebook dictionary</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 6: File Handling</strong>
+              <p>Reading/writing text, working with CSV/JSON, handling file errors, and designing an expense tracker.</p>
+              <p class="tagline">Mini Project · Expense tracker · Homework · CSV processor</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 7: Error Handling & Modules</strong>
+              <p>Try/except, custom exceptions, standard libraries, and building your own helper modules.</p>
+              <p class="tagline">Activity · Dice game with <code>random</code> · Homework · Utility module</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="module-card" data-module="Module 3 — Object-Oriented Programming">
+          <div class="module-header">
+            <h3>Module 3 · Object-Oriented Programming</h3>
+            <span class="module-duration">Classes 8-10</span>
+          </div>
+          <div class="module-meta">
+            <p class="module-tagline">Model real systems with Python objects</p>
+            <button class="module-toggle" type="button" aria-expanded="false">View classes</button>
+          </div>
+          <div class="class-list">
+            <div class="class-item">
+              <strong>Class 8: Intro to OOP</strong>
+              <p>Classes, objects, attributes, methods, and constructors in context.</p>
+              <p class="tagline">Activity · Student class demo · Homework · Car class</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 9: Inheritance, Polymorphism, Encapsulation</strong>
+              <p>Inheritance styles, method overriding, and safe data practices with underscores.</p>
+              <p class="tagline">Mini Project · Employee management · Homework · Extending features</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 10: OOP Practice + Review</strong>
+              <p>Debugging real-world class designs and package structure introductions.</p>
+              <p class="tagline">Mini Project · Banking system · Homework · Refine OOP code</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="module-card" data-module="Module 4 — Libraries, Backend, and AI">
+          <div class="module-header">
+            <h3>Module 4 · Libraries, Backend & AI Intro</h3>
+            <span class="module-duration">Classes 11-13</span>
+          </div>
+          <div class="module-meta">
+            <p class="module-tagline">Transition from scripts to systems</p>
+            <button class="module-toggle" type="button" aria-expanded="false">View classes</button>
+          </div>
+          <div class="class-list">
+            <div class="class-item">
+              <strong>Class 11: External Libraries & APIs</strong>
+              <p>Using <code>pip</code>, calling REST APIs with <code>requests</code>, and parsing JSON/time data.</p>
+              <p class="tagline">Mini Project · Weather app · Homework · API of choice</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 12: Backend with Python</strong>
+              <p>First steps into Django, web patterns, and backend mindset building.</p>
+              <p class="tagline">Activity · Django project tour · Homework · Explore views & URLs</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 13: Generative AI Basics</strong>
+              <p>Working with LLM APIs, scikit-learn RAG concepts, and experimentation patterns.</p>
+              <p class="tagline">Mini Project · AI exploration · Homework · LLM playground</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="module-card" data-module="Module 5 — Capstone & Career">
+          <div class="module-header">
+            <h3>Module 5 · Capstone Project & Wrap-up</h3>
+            <span class="module-duration">Classes 14-15</span>
+          </div>
+          <div class="module-meta">
+            <p class="module-tagline">Ship your project and map the next steps</p>
+            <button class="module-toggle" type="button" aria-expanded="false">View classes</button>
+          </div>
+          <div class="class-list">
+            <div class="class-item">
+              <strong>Class 14: Final Project Build</strong>
+              <p>Dedicated build sprint—apply everything from logic to APIs to OOP while the mentors coach.</p>
+            </div>
+            <div class="class-item">
+              <strong>Class 15: Presentations & Career Insights</strong>
+              <p>Project demos, peer feedback, how Python powers AI/backend/data/automation, and portfolio guidance.</p>
+              <p class="tagline">Celebration · Certificates · Next steps</p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="progress" class="progress-section">
+      <div class="progress-card">
+        <h3>Track Your Journey</h3>
+        <p>Register with your DIU email using the Google Form, then use this tracker to log what you've finished. Everything is saved locally in your browser.</p>
+        <div class="progress-actions">
+          <a class="btn btn-primary" href="https://docs.google.com/forms/d/e/1FAIpQLSflKYhHRHBtw6n1DmtyFTmA-2raQGwY8NtALRFdxMZY4ScHBg/viewform" target="_blank" rel="noopener">Register now</a>
+          <button class="btn btn-outline" id="signOut" style="display: none;">Clear saved progress</button>
+        </div>
+        <div class="auth-status" id="authStatus">Progress saves locally on this device. Use “Clear saved progress” to reset.</div>
+      </div>
+
+      <div class="tracker-panel" id="trackerPanel">
+        <h4>Module Completion Tracker</h4>
+        <ul class="tracker-list">
+          <li class="tracker-item">
+            <label>
+              <input type="checkbox" data-progress="Module 1 — Python Foundations" />
+              <span>Module 1 · Python Foundations</span>
+            </label>
+          </li>
+          <li class="tracker-item">
+            <label>
+              <input type="checkbox" data-progress="Module 2 — Data Structures & File Handling" />
+              <span>Module 2 · Data Structures & File Handling</span>
+            </label>
+          </li>
+          <li class="tracker-item">
+            <label>
+              <input type="checkbox" data-progress="Module 3 — Object-Oriented Programming" />
+              <span>Module 3 · Object-Oriented Programming</span>
+            </label>
+          </li>
+          <li class="tracker-item">
+            <label>
+              <input type="checkbox" data-progress="Module 4 — Libraries, Backend & AI" />
+              <span>Module 4 · Libraries, Backend & AI</span>
+            </label>
+          </li>
+          <li class="tracker-item">
+            <label>
+              <input type="checkbox" data-progress="Module 5 — Capstone & Career" />
+              <span>Module 5 · Capstone & Career</span>
+            </label>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="timeline">
+      <div class="section-title">
+        <span>Flight Plan</span>
+        <h2>Suggested 15-Class Flow</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-grid">
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-week">Week 1</div>
+            <div class="timeline-content">Classes 1-2 · Kickstart Python, environment setup, and master the foundational data types. Ideal for learners new to Python or refreshing fundamentals.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-week">Week 2</div>
+            <div class="timeline-content">Classes 3-4 · Control flow mastery and modular thinking. Build confidence writing reusable functions alongside supportive exercises.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-week">Week 3</div>
+            <div class="timeline-content">Classes 5-6 · Deep dive into data structures and persistent storage. Transition from scripts to data-driven utilities.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-week">Week 4</div>
+            <div class="timeline-content">Classes 7-8 · Error handling best practices and first OOP principles. Prepare for building larger systems.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-week">Week 5</div>
+            <div class="timeline-content">Classes 9-10 · Sharpen OOP design. Debug, refactor, and package your code base for collaboration.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-week">Week 6</div>
+            <div class="timeline-content">Classes 11-12 · Learn to integrate with real APIs and step into Django backend patterns. Connect Python to the web.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-week">Week 7</div>
+            <div class="timeline-content">Class 13 · Engage with AI tooling using Python. Experiment with LLMs and retrieval-augmented generation ideas.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-week">Week 8</div>
+            <div class="timeline-content">Classes 14-15 · Capstone build, presentations, feedback loop, and pathway to career-focused projects.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="faq-section">
+      <div class="section-title">
+        <span>FAQ & Tips</span>
+        <h2>How to Get the Most From This Module</h2>
+      </div>
+
+      <article class="faq-card">
+        <h4>Do I need to register to view modules?</h4>
+        <p>No. The full curriculum is open. Registration just helps the team track interest and send you cohort updates.</p>
+      </article>
+
+      <article class="faq-card">
+        <h4>How is progress stored?</h4>
+        <p>We use browser <code>localStorage</code>. Checkboxes are always available and persist on this device only. Use the clear button if you want to reset.</p>
+      </article>
+
+      <article class="faq-card">
+        <h4>What tools should I prepare?</h4>
+        <p>Install Python 3.x, VS Code or PyCharm, plus Git. By Module 4 you will add Django, requests, and other packages.</p>
+      </article>
+
+      <article class="faq-card">
+        <h4>Can I preview Django content now?</h4>
+        <p>Absolutely. Skim Module 4, Class 12 and follow the activity prompts. If you're a Flutter dev, think of Django views as controllers and templates as UI widgets.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h4>Python One Shot</h4>
+        <p>Curated module-by-module guide for DIU students. Learn the core Python stack, then bridge into backend and AI.</p>
+      </div>
+      <div>
+        <h4>Need Support?</h4>
+        <p>Email the course team at <a href="mailto:sihab2305341203@diu.edu.bd" style="color: var(--accent); text-decoration: none;">sihab2305341203@diu.edu.bd</a></p>
+      </div>
+      <div>
+        <h4>Stay Connected</h4>
+        <p>Follow the university channels and the GitHub repo for updates and project showcases.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">© <span id="year"></span> Daffodil International University · Python Course Module Overview</div>
+  </footer>
+
+  <script>
+    const countdownHoursEl = document.getElementById('countdownHours');
+    const countdownTimestampEl = document.getElementById('countdownTimestamp');
+    const countdownMinutesEl = document.getElementById('countdownMinutes');
+    const countdownSecondsEl = document.getElementById('countdownSeconds');
+    const countdownDeadlineEl = document.getElementById('countdownDeadline');
+    const deadline = new Date('2025-11-14T23:59:59');
+
+    if (countdownDeadlineEl) {
+      countdownDeadlineEl.textContent = `Ends · ${deadline.toLocaleString(undefined, {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })}`;
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const diffMs = deadline - now;
+
+      if (diffMs <= 0) {
+        countdownHoursEl.textContent = '0';
+        countdownMinutesEl.textContent = '00';
+        countdownSecondsEl.textContent = '00';
+        countdownTimestampEl.textContent = 'Registration closed';
+        return;
+      }
+
+      const hours = Math.floor(diffMs / (1000 * 60 * 60));
+      const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+      countdownHoursEl.textContent = hours.toString();
+      countdownMinutesEl.textContent = minutes.toString().padStart(2, '0');
+      countdownSecondsEl.textContent = seconds.toString().padStart(2, '0');
+      countdownTimestampEl.textContent = now.toLocaleString(undefined, {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+
+  <script>
+    const authStatus = document.getElementById('authStatus');
+    const signOutButton = document.getElementById('signOut');
+    const trackerPanel = document.getElementById('trackerPanel');
+    const progressInputs = trackerPanel.querySelectorAll('input[type="checkbox"]');
+
+    const PROGRESS_PREFIX = 'progress-';
+
+    function refreshProgressState() {
+      let anySaved = false;
+      progressInputs.forEach((checkbox) => {
+        const key = `${PROGRESS_PREFIX}${checkbox.dataset.progress}`;
+        const stored = localStorage.getItem(key) === 'true';
+        checkbox.checked = stored;
+        checkbox.disabled = false;
+        if (stored) {
+          anySaved = true;
+        }
+      });
+      signOutButton.style.display = anySaved ? 'inline-flex' : 'none';
+      if (authStatus) {
+        authStatus.textContent = 'Progress saves locally on this device. Use “Clear saved progress” to reset.';
+      }
+    }
+
+    progressInputs.forEach((checkbox) => {
+      checkbox.addEventListener('change', () => {
+        const key = `${PROGRESS_PREFIX}${checkbox.dataset.progress}`;
+        localStorage.setItem(key, checkbox.checked);
+        refreshProgressState();
+      });
+    });
+
+    if (signOutButton) {
+      signOutButton.addEventListener('click', () => {
+        progressInputs.forEach((checkbox) => {
+          const key = `${PROGRESS_PREFIX}${checkbox.dataset.progress}`;
+          localStorage.removeItem(key);
+        });
+        refreshProgressState();
+      });
+    }
+
+    const moduleCards = document.querySelectorAll('.module-card');
+
+    moduleCards.forEach((card) => {
+      const toggleButton = card.querySelector('.module-toggle');
+      const detailsPanel = card.querySelector('.class-list');
+      if (!toggleButton || !detailsPanel) {
+        return;
+      }
+
+      const setState = (isOpen) => {
+        toggleButton.setAttribute('aria-expanded', String(isOpen));
+        toggleButton.textContent = isOpen ? 'Hide details' : 'View classes';
+      };
+
+      setState(card.classList.contains('card-open'));
+
+      toggleButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const shouldOpen = !card.classList.contains('card-open');
+
+        moduleCards.forEach((otherCard) => {
+          if (otherCard !== card) {
+            otherCard.classList.remove('card-open');
+            const otherButton = otherCard.querySelector('.module-toggle');
+            if (otherButton) {
+              otherButton.setAttribute('aria-expanded', 'false');
+              otherButton.textContent = 'View classes';
+            }
+          }
+        });
+
+        if (shouldOpen) {
+          card.classList.add('card-open');
+          setState(true);
+        } else {
+          card.classList.remove('card-open');
+          setState(false);
+        }
+      });
+    });
+
+    refreshProgressState();
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
